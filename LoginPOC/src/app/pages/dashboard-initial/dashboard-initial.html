@@ -1,0 +1,86 @@
+<div class="dashboard-shell">
+  <app-dashboard-sidebar [open]="mobileMenuOpen()" (navigated)="mobileMenuOpen.set(false)" />
+
+  <main id="overview" class="main-content">
+    <header class="topbar">
+      <div class="breadcrumb-label">
+        <button
+          type="button"
+          class="menu-toggle"
+          (click)="toggleMenu()"
+          aria-controls="dashboard-sidebar"
+          [attr.aria-expanded]="mobileMenuOpen()"
+          aria-label="Mostrar menú"
+        >
+          ☰
+        </button>
+        <span class="overview-icon" aria-hidden="true">◫</span><span>MI ESPACIO</span
+        ><span class="separator">/</span><strong>OVERVIEW</strong>
+      </div>
+      <span class="demo-badge"><span aria-hidden="true"></span> DEMO</span>
+    </header>
+
+    <div class="page-content">
+      <section class="page-heading" aria-labelledby="dashboard-title">
+        <div>
+          <p class="eyebrow">TUS HÁBITOS, TU PROGRESO</p>
+          <h1 id="dashboard-title">Cada día cuenta<span>.</span></h1>
+          <p class="page-intro">Hola, Tony. Así va el camino hacia tus objetivos.</p>
+        </div>
+        <div class="period-control" role="group" aria-label="Período de las métricas">
+          <button
+            type="button"
+            [class.selected]="period() === 'week'"
+            [attr.aria-pressed]="period() === 'week'"
+            (click)="period.set('week')"
+          >
+            Semana
+          </button>
+          <button
+            type="button"
+            [class.selected]="period() === 'month'"
+            [attr.aria-pressed]="period() === 'month'"
+            (click)="period.set('month')"
+          >
+            Mes
+          </button>
+        </div>
+      </section>
+
+      @if (loading()) {
+        <div class="loading-state" role="status" aria-live="polite">
+          <span class="loading-dot"></span> Preparando tu progreso…
+        </div>
+      } @else if (error()) {
+        <div class="error-state" role="alert">
+          <p>{{ error() }}</p>
+          <button type="button" class="action-button" (click)="loadStats()">Reintentar</button>
+        </div>
+      } @else if (stats(); as dashboard) {
+        <div class="section-heading">
+          <h2>
+            Tu resumen <span>/ {{ periodLabel() }}</span>
+          </h2>
+          <span class="snapshot-date"
+            >Corte: {{ formatDate(dashboard.asOf, { year: 'numeric' }) }}</span
+          >
+        </div>
+        <section class="summary-grid" aria-label="Resumen de progreso">
+          @for (card of summaryCards(); track card.id) {
+            <app-summary-card [data]="card" [periodLabel]="periodLabel()" />
+          }
+        </section>
+
+        @if (currentPeriod(); as current) {
+          <app-habit-progress [progress]="current" [periodLabel]="periodLabel()" />
+        }
+
+        <app-habit-calendar [stats]="dashboard" />
+        <footer class="dashboard-footer">
+          <span>HABIT STUDIO <span aria-hidden="true">✧</span> HECHO DE PEQUEÑOS PASOS</span
+          ><span>Datos de demostración · Plan hasta la fecha de corte</span>
+        </footer>
+      }
+    </div>
+  </main>
+</div>

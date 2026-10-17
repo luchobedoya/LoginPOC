@@ -1,0 +1,52 @@
+<aside id="dashboard-sidebar" class="sidebar" [class.is-open]="open()">
+  <a
+    class="brand"
+    href="#overview"
+    (click)="selectSection('overview')"
+    aria-label="Habit Studio, inicio"
+  >
+    <span class="brand-mark">h<span>•</span></span
+    ><span>habit<span class="brand-light">studio</span></span>
+  </a>
+  <div class="profile">
+    <div class="avatar" aria-hidden="true">
+      <svg viewBox="0 0 64 64" fill="none">
+        <circle cx="32" cy="23" r="10" />
+        <path d="M13 55v-5c0-10 8-16 19-16s19 6 19 16v5" />
+      </svg>
+      <span class="online-dot"></span>
+    </div>
+    <p class="profile-name">TONY STAN</p>
+    <span class="profile-caption">Construyendo mi mejor versión</span>
+    <span class="profile-badge">UN DÍA A LA VEZ</span>
+  </div>
+  <nav class="sidebar-nav" aria-label="Navegación del dashboard">
+    <span class="nav-caption">MI ESPACIO</span>
+    @for (item of navigation; track item.id) {
+      <a
+        [href]="'#' + item.id"
+        [class.active]="activeSection() === item.id"
+        [attr.aria-current]="activeSection() === item.id ? 'location' : null"
+        (click)="selectSection(item.id)"
+      >
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path [attr.d]="item.icon" />
+        </svg>
+        <span>{{ item.label }}</span
+        ><span class="nav-arrow" aria-hidden="true">›</span>
+      </a>
+    }
+  </nav>
+  <div class="sidebar-bottom">
+    <div class="sidebar-note">
+      <span aria-hidden="true">✧</span>
+      <p>El progreso empieza<br />con un pequeño hábito.</p>
+    </div>
+    <button type="button" class="logout-button" (click)="logout()">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M10 4H4v16h6M14 8l4 4-4 4M8 12h12" />
+      </svg>
+      <span>Cerrar sesión</span>
+    </button>
+  </div>
+</aside>

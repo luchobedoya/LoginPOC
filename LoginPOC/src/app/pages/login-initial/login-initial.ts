@@ -1,5 +1,11 @@
-import { Component, signal } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { defer, take } from 'rxjs';
+
+import { AuthSessionGateway } from '../../domain/gateways/auth-session.gateway';
+import { LoginUseCase } from '../../domain/use-cases/login.use-case';
 
 interface LoginFormControls {
   username: FormControl<string>;
@@ -17,9 +23,15 @@ type LoginField = 'username' | 'password';
   styleUrl: './login-initial.scss',
 })
 export class LoginInitial {
+  private readonly loginUseCase = inject(LoginUseCase);
+  private readonly session = inject(AuthSessionGateway);
+  private readonly router = inject(Router);
+  private readonly destroyRef = inject(DestroyRef);
+
   protected readonly isSubmitting = signal(false);
   protected readonly showPassword = signal(false);
   protected readonly submitted = signal(false);
+  protected readonly loginError = signal('');
 
   protected readonly loginForm = new FormGroup<LoginFormControls>({
     username: new FormControl('', {
@@ -81,7 +93,12 @@ export class LoginInitial {
   }
 
   protected onSubmit(): void {
+    if (this.isSubmitting()) {
+      return;
+    }
+
     this.submitted.set(true);
+    this.loginError.set('');
 
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
@@ -89,11 +106,35 @@ export class LoginInitial {
     }
 
     this.isSubmitting.set(true);
-    const { username, password, rememberMe } = this.loginForm.getRawValue();
+    const credentials = this.loginForm.getRawValue();
+    let authenticated = false;
 
-    setTimeout(() => {
-      alert(JSON.stringify({ username, password, rememberMe }, null, 2));
-      this.isSubmitting.set(false);
-    });
+    defer(() => this.loginUseCase.execute(credentials))
+      .pipe(take(1), takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (user) => {
+          authenticated = true;
+          this.session.establish(user, credentials.rememberMe);
+          void this.router.navigateByUrl('/dashboard').then((navigated) => {
+            if (navigated) {
+              return;
+            }
+
+            this.isSubmitting.set(false);
+            this.loginError.set('Unable to open the dashboard. Please try again.');
+          });
+        },
+        error: (error: unknown) => {
+          this.isSubmitting.set(false);
+          this.loginError.set(
+            error instanceof Error ? error.message : 'Unable to log in. Please try again.',
+          );
+        },
+        complete: () => {
+          if (!authenticated) {
+            this.isSubmitting.set(false);
+          }
+        },
+      });
   }
 }

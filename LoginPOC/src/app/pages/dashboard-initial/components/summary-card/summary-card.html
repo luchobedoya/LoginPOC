@@ -1,0 +1,22 @@
+@let card = data();
+<article [class]="'summary-card ' + card.id">
+  <div class="summary-top">
+    <div class="card-label">{{ card.title }}<span aria-hidden="true">↗</span></div>
+    <div class="metric-value">
+      {{ card.value }}<span>{{ card.unit }}</span>
+    </div>
+    <p>{{ card.detail }}</p>
+  </div>
+  <div class="sparkline-area">
+    <div class="chart-caption">
+      <span>{{ periodLabel() }}</span
+      ><span aria-hidden="true">•••</span>
+    </div>
+    <svg class="sparkline" viewBox="0 0 300 100" preserveAspectRatio="none" aria-hidden="true">
+      <path class="chart-grid" d="M8 20H292M8 52H292M8 84H292" />
+      <path class="chart-line-shadow" [attr.d]="card.path" />
+      <path class="chart-line" [attr.d]="card.path" />
+    </svg>
+    <p>{{ card.footer }}</p>
+  </div>
+</article>

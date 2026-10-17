@@ -1,0 +1,98 @@
+@let dashboard = stats();
+<section id="calendar" class="calendar-panel" aria-labelledby="calendar-title">
+  <div class="calendar-main">
+    <div class="panel-heading">
+      <div>
+        <p class="eyebrow">UN HÁBITO A LA VEZ</p>
+        <h2 id="calendar-title">
+          Tu calendario <span>{{ monthLabel() }}</span>
+        </h2>
+      </div>
+      <span class="calendar-mark" aria-hidden="true">▦</span>
+    </div>
+    <div class="calendar-weekdays" aria-hidden="true">
+      @for (day of weekdays; track $index) {
+        <span>{{ day }}</span>
+      }
+    </div>
+    <div
+      class="calendar-grid"
+      role="group"
+      aria-label="Días del mes; selecciona uno para ver sus hábitos"
+    >
+      @for (slot of calendarPadding(); track slot) {
+        <span class="calendar-padding" aria-hidden="true"></span>
+      }
+      @for (day of dashboard.calendar; track day.date) {
+        <button
+          type="button"
+          [class]="'calendar-day ' + day.status"
+          [class.is-selected]="selectedDate() === day.date"
+          [class.is-today]="day.date === dashboard.asOf"
+          [attr.aria-pressed]="selectedDate() === day.date"
+          [attr.aria-label]="
+            formatDate(day.date) +
+            ': ' +
+            statusLabels[day.status] +
+            ', ' +
+            day.completedActivities +
+            ' de ' +
+            day.plannedActivities +
+            ' hábitos'
+          "
+          [attr.aria-current]="day.date === dashboard.asOf ? 'date' : null"
+          (click)="selectDay(day.date)"
+        >
+          <span>{{ day.dayOfMonth }}</span
+          ><span class="day-dot" aria-hidden="true"></span>
+        </button>
+      }
+    </div>
+    <div class="calendar-legend">
+      <span><i class="completed"></i>Cumplido</span><span><i class="partial"></i>En progreso</span
+      ><span><i class="pending"></i>Pendiente</span><span><i class="upcoming"></i>Próximo</span>
+    </div>
+  </div>
+  <aside class="day-detail" aria-label="Detalle del día seleccionado" aria-live="polite">
+    @if (selectedDay(); as day) {
+      <div class="day-heading">
+        <div>
+          <p class="eyebrow">TU DÍA EN DETALLE</p>
+          <h3>
+            {{ formatDate(day.date)
+            }}<span>{{ day.date === dashboard.asOf ? 'HOY' : statusLabels[day.status] }}</span>
+          </h3>
+        </div>
+        <span class="day-counter"
+          >{{ day.completedActivities }}<small>/{{ day.plannedActivities }}</small></span
+        >
+      </div>
+      <ul class="daily-habits">
+        @for (item of day.habits; track item.habit.id) {
+          <li [style.--habit-color]="habitAppearance[item.habit.id].color">
+            <span class="habit-symbol" aria-hidden="true">{{
+              habitAppearance[item.habit.id].symbol
+            }}</span>
+            <div>
+              <strong>{{ item.habit.name }}</strong
+              ><span>{{ item.minutes }} / {{ item.habit.dailyGoalMinutes }} min</span>
+            </div>
+            <span
+              class="habit-check"
+              [class.done]="item.minimumReached"
+              [attr.aria-label]="item.minimumReached ? 'Mínimo alcanzado' : 'Mínimo pendiente'"
+              >{{ item.minimumReached ? '✓' : '–' }}</span
+            >
+          </li>
+        }
+      </ul>
+      <p class="day-note">
+        {{
+          day.status === 'upcoming'
+            ? 'Una nueva oportunidad para seguir creciendo.'
+            : 'Un día cumplido significa alcanzar los cinco mínimos.'
+        }}
+      </p>
+    }
+  </aside>
+</section>

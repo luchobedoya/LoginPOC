@@ -1,0 +1,76 @@
+@if (progress(); as current) {
+  <div class="details-grid">
+    <section id="consistency" class="consistency-panel" aria-labelledby="consistency-title">
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">PASO A PASO</p>
+          <h2 id="consistency-title">La constancia se construye</h2>
+        </div>
+        <span class="panel-period">{{ periodLabel() }}</span>
+      </div>
+      <div class="donut-grid">
+        @for (progress of current.habits; track progress.habit.id) {
+          <div class="habit-donut" [style.--habit-color]="habitAppearance[progress.habit.id].color">
+            <div
+              class="donut"
+              [style.--progress]="progress.consistencyPercent + '%'"
+              role="img"
+              [attr.aria-label]="
+                progress.habit.name + ': ' + progress.consistencyPercent + '% de consistencia'
+              "
+            >
+              <div class="donut-inner">
+                <strong>{{ progress.consistencyPercent }}<span>%</span></strong>
+              </div>
+            </div>
+            <h3>{{ progress.habit.name }}</h3>
+            <p>{{ progress.completedDays }} de {{ progress.plannedDays }} días</p>
+          </div>
+        }
+      </div>
+      <p class="panel-footnote">
+        <span aria-hidden="true">↗</span> Cada porcentaje refleja los días en que alcanzaste el
+        mínimo del hábito.
+      </p>
+    </section>
+
+    <section id="time-targets" class="time-panel" aria-labelledby="time-title">
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">INVIERTE EN TI</p>
+          <h2 id="time-title">Tiempo vs. meta</h2>
+        </div>
+        <span class="small-icon" aria-hidden="true">◷</span>
+      </div>
+      <div class="time-bars">
+        @for (progress of current.habits; track progress.habit.id) {
+          <div class="time-row" [style.--habit-color]="habitAppearance[progress.habit.id].color">
+            <div class="time-label">
+              <h3>{{ progress.habit.name }}</h3>
+              <span
+                >{{ formatMinutes(progress.totalMinutes) }}
+                <span class="time-goal">/ {{ formatMinutes(progress.goalMinutes) }}</span></span
+              >
+            </div>
+            <div
+              class="time-track"
+              role="progressbar"
+              [attr.aria-label]="progress.habit.name + ', tiempo dedicado frente a meta'"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              [attr.aria-valuenow]="timeProgress(progress.totalMinutes, progress.goalMinutes)"
+              [attr.aria-valuetext]="
+                formatMinutes(progress.totalMinutes) + ' de ' + formatMinutes(progress.goalMinutes)
+              "
+            >
+              <span
+                [style.width.%]="timeProgress(progress.totalMinutes, progress.goalMinutes)"
+              ></span>
+            </div>
+          </div>
+        }
+      </div>
+      <p class="time-footnote">Meta diaria × {{ current.elapsedDays }} días transcurridos</p>
+    </section>
+  </div>
+}
