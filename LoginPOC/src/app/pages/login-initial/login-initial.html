@@ -1,0 +1,215 @@
+<main class="login-page container-fluid p-0">
+  <div class="row g-0 min-vh-100">
+    <section class="login-panel col-12 col-lg-6 d-flex align-items-center justify-content-center" aria-labelledby="login-title">
+      <button type="button" class="back-button" (click)="goBack()" aria-label="Go back">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+          <path
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M15 19 8 12l7-7"
+          />
+        </svg>
+      </button>
+
+      <div class="login-content">
+        <header class="login-header">
+          <h1 id="login-title">Login to system</h1>
+          <p class="login-lead">
+            Please enter your login information or<br />
+            <a class="register-link" href="#register" (click)="$event.preventDefault()">click here</a>
+            to registration
+          </p>
+        </header>
+
+        <form class="login-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
+          <div class="field">
+            <label for="username">Username</label>
+            <input
+              id="username"
+              class="underline-input"
+              type="text"
+              name="username"
+              formControlName="username"
+              autocomplete="username"
+              spellcheck="false"
+              [class.is-invalid]="showError('username')"
+              [attr.aria-invalid]="showError('username')"
+              [attr.aria-describedby]="showError('username') ? 'username-error' : null"
+            />
+            @if (showError('username')) {
+              <p id="username-error" class="field-error" role="alert">{{ errorMessage('username') }}</p>
+            }
+          </div>
+
+          <div class="field">
+            <label for="password">Password</label>
+            <div class="password-wrap">
+              <input
+                id="password"
+                class="underline-input"
+                [type]="showPassword() ? 'text' : 'password'"
+                name="password"
+                formControlName="password"
+                autocomplete="current-password"
+                [class.is-invalid]="showError('password')"
+                [attr.aria-invalid]="showError('password')"
+                [attr.aria-describedby]="showError('password') ? 'password-error' : null"
+              />
+              <button
+                type="button"
+                class="toggle-password"
+                (click)="togglePassword()"
+                [attr.aria-pressed]="showPassword()"
+                [attr.aria-label]="showPassword() ? 'Hide password' : 'Show password'"
+              >
+                @if (showPassword()) {
+                  <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                    <path
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.7"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M3 3l18 18M10.6 10.7A2 2 0 0 0 12 14a2 2 0 0 0 1.8-1.1M6.1 6.4C4 7.8 2.6 9.8 2 12c1.2 2.7 4.4 6 10 6 1.7 0 3.2-.3 4.5-.9M9.9 5.2A11 11 0 0 1 12 5c5.6 0 8.8 3.3 10 6a12 12 0 0 1-2.2 3.1"
+                    />
+                  </svg>
+                } @else {
+                  <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                    <path
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.7"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12z"
+                    />
+                    <circle cx="12" cy="12" r="2.4" fill="none" stroke="currentColor" stroke-width="1.7" />
+                  </svg>
+                }
+              </button>
+            </div>
+            @if (showError('password')) {
+              <p id="password-error" class="field-error" role="alert">{{ errorMessage('password') }}</p>
+            }
+          </div>
+
+          <div class="form-check remember">
+            <input class="form-check-input" type="checkbox" id="rememberMe" formControlName="rememberMe" />
+            <label class="form-check-label" for="rememberMe">Remember me</label>
+          </div>
+
+          <button class="login-button" type="submit" [disabled]="isSubmitting()" [attr.aria-busy]="isSubmitting()">
+            @if (isSubmitting()) {
+              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            }
+            {{ isSubmitting() ? 'Logging in...' : 'Log In' }}
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <aside class="visual-panel col-lg-6 d-none d-lg-block" aria-hidden="true">
+      <svg class="art" viewBox="0 0 800 1200" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="loginBg" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#1a0b3c" />
+            <stop offset="38%" stop-color="#3d157c" />
+            <stop offset="72%" stop-color="#1d4ed8" />
+            <stop offset="100%" stop-color="#0f766e" />
+          </linearGradient>
+          <radialGradient id="glowPink" cx="28%" cy="22%" r="48%">
+            <stop offset="0%" stop-color="#ff4ecd" stop-opacity="0.95" />
+            <stop offset="100%" stop-color="#ff4ecd" stop-opacity="0" />
+          </radialGradient>
+          <radialGradient id="glowViolet" cx="70%" cy="38%" r="42%">
+            <stop offset="0%" stop-color="#7c3aed" stop-opacity="0.9" />
+            <stop offset="100%" stop-color="#7c3aed" stop-opacity="0" />
+          </radialGradient>
+          <radialGradient id="glowBlue" cx="78%" cy="72%" r="46%">
+            <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.95" />
+            <stop offset="100%" stop-color="#3b82f6" stop-opacity="0" />
+          </radialGradient>
+          <radialGradient id="glowCyan" cx="32%" cy="84%" r="40%">
+            <stop offset="0%" stop-color="#67e8f9" stop-opacity="0.8" />
+            <stop offset="100%" stop-color="#67e8f9" stop-opacity="0" />
+          </radialGradient>
+          <linearGradient id="ribbonA" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#ff6ad5" />
+            <stop offset="42%" stop-color="#8b5cf6" />
+            <stop offset="100%" stop-color="#3b82f6" />
+          </linearGradient>
+          <linearGradient id="ribbonB" x1="100%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#67e8f9" />
+            <stop offset="48%" stop-color="#6366f1" />
+            <stop offset="100%" stop-color="#c026d3" />
+          </linearGradient>
+          <linearGradient id="ribbonC" x1="0%" y1="100%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#1d4ed8" />
+            <stop offset="50%" stop-color="#a855f7" />
+            <stop offset="100%" stop-color="#fb7185" />
+          </linearGradient>
+          <linearGradient id="sheen" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#ffffff" stop-opacity="0.75" />
+            <stop offset="45%" stop-color="#ffffff" stop-opacity="0.08" />
+            <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+          </linearGradient>
+          <filter id="loginWash" x="-25%" y="-25%" width="150%" height="150%">
+            <feGaussianBlur stdDeviation="28" />
+          </filter>
+          <filter id="loginSilk" x="-8%" y="-8%" width="116%" height="116%">
+            <feGaussianBlur stdDeviation="3.5" />
+          </filter>
+        </defs>
+
+        <rect width="800" height="1200" fill="url(#loginBg)" />
+        <rect width="800" height="1200" fill="url(#glowPink)" filter="url(#loginWash)" />
+        <rect width="800" height="1200" fill="url(#glowViolet)" filter="url(#loginWash)" />
+        <rect width="800" height="1200" fill="url(#glowBlue)" filter="url(#loginWash)" />
+        <rect width="800" height="1200" fill="url(#glowCyan)" filter="url(#loginWash)" />
+
+        <g filter="url(#loginSilk)" opacity="0.95">
+          <path
+            d="M-60 180C150 40 340 260 170 470C10 670 300 790 150 1020C70 1160-10 1240 40 1340"
+            fill="none"
+            stroke="url(#ribbonA)"
+            stroke-width="168"
+            stroke-linecap="round"
+          />
+          <path
+            d="M860 60C600 180 470 40 560 300C670 560 390 720 530 940C650 1120 790 1180 700 1360"
+            fill="none"
+            stroke="url(#ribbonB)"
+            stroke-width="150"
+            stroke-linecap="round"
+          />
+          <path
+            d="M390-40C560 200 210 340 430 560C640 770 250 900 400 1120C490 1240 330 1300 420 1380"
+            fill="none"
+            stroke="url(#ribbonC)"
+            stroke-width="92"
+            stroke-linecap="round"
+          />
+          <path
+            d="M120 60C280 220 40 420 240 620C420 800 160 980 300 1220"
+            fill="none"
+            stroke="url(#sheen)"
+            stroke-width="22"
+            stroke-linecap="round"
+            opacity="0.55"
+          />
+          <path
+            d="M640 140C500 300 760 480 560 700C390 890 700 1040 520 1280"
+            fill="none"
+            stroke="url(#sheen)"
+            stroke-width="16"
+            stroke-linecap="round"
+            opacity="0.4"
+          />
+        </g>
+      </svg>
+    </aside>
+  </div>
+</main>
