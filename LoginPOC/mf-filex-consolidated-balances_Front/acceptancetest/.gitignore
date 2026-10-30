@@ -1,9 +1,0 @@
-# Reportes
-reports/*
-
-# Test Results
-test-results/*
-
-# acceptancetest_dependencies
-node_modules
-package-lock.json
