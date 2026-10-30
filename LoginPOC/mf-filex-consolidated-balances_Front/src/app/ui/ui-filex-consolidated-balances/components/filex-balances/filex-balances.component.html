@@ -1,0 +1,20 @@
+@if (showWidgetConsolidatedBalances) {
+  <bc-consolidated-balances-widget #consolidatedBalances class="bc-px-2 bc-mt-4" [configWidget]="configWidget">
+  </bc-consolidated-balances-widget>
+} @else {
+  <ng-container [ngTemplateOutlet]="errorTemplate"></ng-container>
+}
+
+<ng-template #errorTemplate id="errorTemplate" let-errorData="errorData">
+  <div class="bc-container-fluid">
+    <svn-error
+      [error]="errorComponent"
+      [contactError]="errorContact"
+      [initialCounterErrorValue]="errorsCounter"
+      [showCustomContacts]="true"
+      (retry)="onRetry()"
+      (goToHome)="goToHome()">
+      <svn-contact-list [showCustomContactsFilex]="true"></svn-contact-list>
+    </svn-error>
+  </div>
+</ng-template>

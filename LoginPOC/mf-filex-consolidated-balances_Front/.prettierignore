@@ -1,0 +1,6 @@
+**/host/**/index.html
+dist
+coverage
+node_modules
+package-lock.json
+*.min.js

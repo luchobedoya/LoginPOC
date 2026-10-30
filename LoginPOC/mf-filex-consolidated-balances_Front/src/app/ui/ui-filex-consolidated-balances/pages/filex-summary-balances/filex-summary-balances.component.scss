@@ -1,0 +1,35 @@
+::ng-deep {
+  .bc-tabs {
+    justify-content: space-evenly;
+  }
+
+  .bc-tab {
+    justify-content: center;
+    width: 50%;
+  }
+
+  .bc-tabs-border {
+    width: 50% !important;
+  }
+
+  @media screen and (max-width: 575px) {
+    .mobile-header-filex {
+      flex-wrap: wrap;
+
+      .bc-breadcrumb-v2 {
+        margin-bottom: 10px;
+      }
+    }
+
+    #download-balance-button {
+      .bc-tag-content {
+        span.bc-mx-1 {
+          display: none;
+        }
+      }
+    }
+  }
+}
+:host {
+  display: block;
+}

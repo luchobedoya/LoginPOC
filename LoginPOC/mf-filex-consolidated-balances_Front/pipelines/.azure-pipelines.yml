@@ -1,0 +1,21 @@
+name: $(Build.SourceBranchName).$(date:yyyyMMdd)$(rev:.r)
+
+resources:
+  repositories:
+    - repository: svnWebRepo
+      type: git
+      name: NU0214001_SucursalVirtualNegociosWEB_MR
+      ref: refs/heads/trunk
+
+trigger:
+  branches:
+    include:
+      - trunk
+  paths:
+    include:
+      - mf-filex-consolidated-balances_Front/*
+
+jobs:
+  - template: ./microfront-pipeline-template-v3.yml@svnWebRepo
+    parameters:
+      microfront: mf-filex-consolidated-balances

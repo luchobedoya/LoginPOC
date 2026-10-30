@@ -1,0 +1,12 @@
+{
+  "recommendations": [
+    "Angular.ng-template",
+    "vivaxy.vscode-conventional-commits",
+    "cschlosser.doxdocgen",
+    "adpyke.codesnap",
+    "dbaeumer.vscode-eslint",
+    "eamodio.gitlens",
+    "Orta.vscode-jest",
+    "esbenp.prettier-vscode"
+  ]
+}

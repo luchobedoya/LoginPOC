@@ -1,0 +1,147 @@
+{
+  "root": true,
+  "ignorePatterns": [
+    "dist",
+    "coverage",
+    "polyfills",
+    "acceptancetest",
+    "environments",
+    "setup-jest.ts",
+    "src/index.html",
+    "node_modules",
+    ".husky",
+    ".angular"
+  ],
+  "overrides": [
+    {
+      "files": ["*.ts"],
+      "parserOptions": {
+        "project": ["./tsconfig.app.json", "./tsconfig.spec.json"],
+        "createDefaultProgram": true,
+        "ecmaVersion": 2022
+      },
+      "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:@typescript-eslint/stylistic",
+        "plugin:@angular-eslint/recommended",
+        "plugin:@angular-eslint/template/process-inline-templates",
+        "plugin:prettier/recommended"
+      ],
+      "rules": {
+        "@typescript-eslint/no-non-null-asserted-optional-chain": "warn",
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-unused-vars": "warn",
+        "@angular-eslint/component-selector": [
+          "error",
+          {
+            "type": "element",
+            "prefix": "svn",
+            "style": "kebab-case"
+          }
+        ],
+        "@angular-eslint/directive-selector": [
+          "error",
+          {
+            "type": "attribute",
+            "prefix": "svn",
+            "style": "camelCase"
+          }
+        ],
+        "prettier/prettier": "warn",
+        "arrow-body-style": "off",
+        "prefer-arrow-callback": "off",
+        "object-curly-spacing": "off",
+        "max-lines": [
+          "error",
+          {
+            "max": 750,
+            "skipBlankLines": true,
+            "skipComments": true
+          }
+        ],
+        "max-lines-per-function": [
+          "error",
+          {
+            "max": 35,
+            "skipBlankLines": true,
+            "skipComments": true,
+            "IIFEs": true
+          }
+        ],
+        "complexity": ["error", 10],
+        "prefer-const": "error",
+        "no-magic-numbers": "off",
+        "@typescript-eslint/no-magic-numbers": [
+          "error",
+          {
+            "ignoreEnums": true,
+            "ignoreArrayIndexes": true,
+            "ignoreDefaultValues": true
+          }
+        ],
+        "curly": "error",
+        "no-empty-function": [
+          "error",
+          {
+            "allow": ["constructors"]
+          }
+        ],
+        "@typescript-eslint/restrict-plus-operands": "error",
+        "@typescript-eslint/no-unnecessary-boolean-literal-compare": "error",
+        "no-console": "error",
+        "no-debugger": "error",
+        "no-cond-assign": "error",
+        "no-const-assign": "error",
+        "no-sparse-arrays": "error",
+        "no-template-curly-in-string": "error",
+        "no-unreachable": "error",
+        "@angular-eslint/no-input-rename": "off"
+      }
+    },
+    {
+      "files": ["*.html"],
+      "extends": [
+        "plugin:@angular-eslint/template/recommended",
+        "plugin:@angular-eslint/template/accessibility",
+        "plugin:prettier/recommended"
+      ],
+      "rules": {
+        "prettier/prettier": "warn"
+      }
+    },
+    {
+      "files": ["*.spec.ts"],
+      "plugins": ["jest"],
+      "env": {
+        "jest": true
+      },
+      "rules": {
+        "jest/consistent-test-it": [
+          "error",
+          {
+            "fn": "test",
+            "withinDescribe": "test"
+          }
+        ],
+        "jest/no-disabled-tests": "warn",
+        "jest/no-focused-tests": "error",
+        "jest/no-identical-title": "error",
+        "jest/prefer-to-have-length": "warn",
+        "jest/valid-expect": "error",
+        "max-lines-per-function": "off",
+        "max-lines": "off"
+      }
+    },
+    {
+      "files": ["*.js"],
+      "env": {
+        "node": true,
+        "es6": true
+      },
+      "parserOptions": {
+        "ecmaVersion": 2020
+      }
+    }
+  ]
+}
